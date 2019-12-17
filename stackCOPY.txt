@@ -1,0 +1,167 @@
+#ifndef STACK_H
+#define STACK_H
+#include "node.h"
+#include <iostream>
+
+class Stack
+{
+    public:
+        //Accessors
+        Node* getHead(){return head;}
+        //Mutators
+        void setHead(Node *n){head = n;}
+        //Constructors
+        Stack();
+        Stack(Node*);
+        //Copy Constructor
+        Stack(Stack&);
+        //Destructor
+        ~Stack();
+        //Overloaded Operator
+        friend std::ostream& operator<<(std::ostream&, const Stack&);
+        friend void operator<<(Stack&, Node*&);
+        friend void operator>>(Stack&, Node*&);
+        void destroyStack(Stack*);
+
+    protected:
+
+    private:
+        Node *head = nullptr;
+
+};
+
+#endif // STACK_H
+
+
+
+#include "stack.h"
+#include <iostream>
+
+Stack::Stack()
+{
+    head = nullptr;
+}
+
+Stack::Stack(Node* h) {
+     while (h != nullptr) {
+        Node* app = new Node;
+        app->setOperand(h->getOperand());
+        app->setOperator(h->getOperator());
+        if (!head) {
+           head = app;
+        }
+        else {
+            Node* trav = head;
+            while (trav->getNext() != nullptr) {
+                trav = trav->getNext();
+            }
+            trav->setNext(app);
+        }
+        Node* del = h;
+        h = h->getNext();
+        delete del;
+    }
+}
+
+Stack::Stack(Stack &s) {
+    Node* h = s.getHead();
+    while (h != nullptr) {
+        Node* app = new Node;
+        app->setOperand(h->getOperand());
+        app->setOperator(h->getOperator());
+        if (!head) {
+           head = app;
+        }
+        else {
+            Node* trav = head;
+            while (trav->getNext() != nullptr) {
+                trav = trav->getNext();
+            }
+            trav->setNext(app);
+        }
+        h = h->getNext();
+    }
+}
+/***
+THIS NEEDS TO USE RECURSION TO DELETE LIST
+**/
+void Stack::destroyStack(Stack* obj) {
+    if (head != nullptr) {
+        Node* hold = nullptr;
+        hold = head;
+        head = head->getNext();
+        delete hold;
+        destroyStack(obj);
+    }
+    else {
+        return;
+    }
+}
+Stack::~Stack() {
+    destroyStack(this);
+}
+
+/**OVERLOAD << FOR OUTPUT**/
+std::ostream& operator<<(std::ostream& out, const Stack& obj) {
+    //traversal pointer used in for loop
+    Node* trav;
+    bool first = true;
+    //out << "STACK: ";
+    //Print out each node in stack
+    for (trav = obj.head; trav != nullptr; trav = trav->getNext()) {
+        //format for first printed node
+        if (first) {
+            first = false;
+            if (trav->getOperator() != ' ') {
+                out << trav->getOperator();
+            } else {
+                out << trav->getOperand();
+            }
+        }
+        //format for printed nodes after first
+        else {
+            if (trav->getOperator() != ' ') {
+                out << ", " << trav->getOperator();
+            } else {
+                out << ", " << trav->getOperand();
+            }
+        }
+    }
+    return out;
+}
+
+/**OVERLOAD << FOR PUSH**/
+void operator<<(Stack& obj, Node* &node) {
+    //when stack is NOT empty
+    if (obj.getHead() != nullptr) {
+        node->setNext(obj.getHead());
+        obj.setHead(node);
+    }
+    //when stack IS empty
+    else {
+        obj.setHead(node);
+    }
+}
+
+/**OVERLOAD >> FOR POP**/
+void operator>>(Stack& obj, Node* &node){
+    //remove first item in stack IF stack is NOT empty
+    if (obj.head != nullptr) {
+        //assign first item in stack to parameter
+        node = obj.head;
+        //remove first item in stack
+        //node* d = nullptr;
+        //d = obj.head->getNext();
+        obj.setHead(obj.head->getNext());
+        //node->setNext(nullptr);
+        //delete node;
+        //if (node)
+        //delete node;
+    }
+    //OTHERWISE do nothing
+    else {
+        node = nullptr;
+    }
+}
+
+

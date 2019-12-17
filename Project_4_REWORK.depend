@@ -1,0 +1,26 @@
+# depslib dependency file v1.0
+1574648745 source:c:\1337hw\project_4_rework\main.cpp
+	"node.h"
+	"stack.h"
+	<iostream>
+	<fstream>
+	<string>
+	<stdio.h>
+	<stdlib.h>
+	<ctype.h>
+	<iomanip>
+	<math.h>
+
+1574571197 c:\1337hw\project_4_rework\include\node.h
+
+1574571197 c:\1337hw\project_4_rework\include\stack.h
+	"node.h"
+	<iostream>
+
+1574571197 source:c:\1337hw\project_4_rework\src\node.cpp
+	"node.h"
+
+1574649202 source:c:\1337hw\project_4_rework\src\stack.cpp
+	"stack.h"
+	<iostream>
+
